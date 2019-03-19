@@ -1,7 +1,7 @@
 package com.lyf.run;
 
 import com.lyf.bean.FlowBean;
-import com.lyf.bean.ProvincePartitioner;
+import com.lyf.bo.ProvincePartitioner;
 import com.lyf.mr02.FlowCountMap;
 import com.lyf.mr02.FlowCountReduce;
 import com.lyf.utils.HadoopDriverUtil;

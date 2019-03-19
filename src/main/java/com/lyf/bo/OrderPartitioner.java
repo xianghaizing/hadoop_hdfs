@@ -1,5 +1,6 @@
-package com.lyf.bean;
+package com.lyf.bo;
 
+import com.lyf.bean.OrderBean;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
@@ -11,6 +12,6 @@ import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;
 public class OrderPartitioner extends Partitioner<OrderBean, NullWritable> {
     @Override
     public int getPartition(OrderBean key, NullWritable text, int numPartitions) {
-        return (key.getOrderId() & Integer.MAX_VALUE) % 3;
+        return key.getOrderId() % numPartitions;
     }
 }

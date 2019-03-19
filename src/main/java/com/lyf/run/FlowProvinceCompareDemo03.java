@@ -1,7 +1,7 @@
 package com.lyf.run;
 
 import com.lyf.bean.FlowCompareBean;
-import com.lyf.bean.ProvinceComparePartitioner;
+import com.lyf.bo.ProvinceComparePartitioner;
 import com.lyf.mr03.FlowCountCompareMap;
 import com.lyf.mr03.FlowCountCompareReduce;
 import com.lyf.utils.HadoopDriverUtil;

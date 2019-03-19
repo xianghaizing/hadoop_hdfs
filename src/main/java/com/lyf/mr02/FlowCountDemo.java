@@ -1,7 +1,7 @@
 package com.lyf.mr02;
 
 import com.lyf.bean.FlowBean;
-import com.lyf.bean.ProvincePartitioner;
+import com.lyf.bo.ProvincePartitioner;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;

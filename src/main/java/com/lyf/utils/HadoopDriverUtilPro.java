@@ -2,76 +2,87 @@ package com.lyf.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Date;
 
 /**
  * @author lyf
  * @date 2019/3/18 0018 下午 7:58
  */
-public class HadoopDriverUtil {
+public class HadoopDriverUtilPro{
 
     private String jobName;
-
     private Class mapClass;
-    private Class outKeyClass;
-    private Class outValueClass;
-
     private Class reducerClass;
-    private Class inKeyClass;
-    private Class inValueClass;
-
+    private Class mainClass;
     private String outPath;
 
-    public HadoopDriverUtil() {
+    /**
+     * 自动生成任务编号
+     */
+    public HadoopDriverUtilPro() {
         this.jobName = "job_" + new Date().getTime();
     }
 
-    public void setMap(Class map, Class key, Class value) {
+    /**
+     * 设置运行类
+     * @param map   Mapper类
+     * @param reducer   Reduce类
+     * @param main  运行主类
+     */
+    public HadoopDriverUtilPro(Class map, Class reducer, Class main) {
+        this.jobName = "job_" + new Date().getTime();
         this.mapClass = map;
-        this.outKeyClass = key;
-        this.outValueClass = value;
-    }
-
-    public void setReducer(Class reducer, Class key, Class value) {
         this.reducerClass = reducer;
-        this.inKeyClass = key;
-        this.inValueClass = value;
+        this.mainClass = main;
     }
 
-    public Job getInstance(Class main, String in, String out) throws IOException {
+    /**
+     * 设置输入输出路径
+     * @param in    文件输入路径
+     * @param out   文件输出路径
+     * @return
+     * @throws IOException
+     */
+    public Job getInstance(String in, String out) throws IOException {
         // 1. 获取配置
         Configuration conf = new Configuration();
         // 2. 获取job对象
         Job job = Job.getInstance(conf, jobName);
         // 3. 设置运行主类
-        job.setJarByClass(main);
-
+        job.setJarByClass(mainClass);
         // 4. 设置Map
         job.setMapperClass(mapClass);
-
-        job.setMapOutputKeyClass(outKeyClass);
-        job.setMapOutputValueClass(outValueClass);
+        // 获取泛型列表
+        ParameterizedType p = (ParameterizedType) mapClass.getGenericSuperclass();
+        // 获取map阶段的输出类型并设置
+        job.setMapOutputKeyClass((Class) p.getActualTypeArguments()[2]);
+        job.setMapOutputValueClass((Class) p.getActualTypeArguments()[3]);
         FileInputFormat.addInputPath(job, new Path(in));
 
         // 5. 设置Reduce
         job.setReducerClass(reducerClass);
-        job.setOutputKeyClass(inKeyClass);
-        job.setOutputValueClass(inValueClass);
+        // 获取reduce阶段的输出类型并设置
+        p = (ParameterizedType) reducerClass.getGenericSuperclass();
+        job.setOutputKeyClass((Class) p.getActualTypeArguments()[2]);
+        job.setOutputValueClass((Class) p.getActualTypeArguments()[3]);
+        // 6. 随机生成输出目录,方便调试
         this.outPath = out+"\\"+r(4);
         FileOutputFormat.setOutputPath(job, new Path(outPath));
         return job;
-
-//        // 设置分区
-//        job.setPartitionerClass(ProvinceComparePartitioner.class);
-//        job.setNumReduceTasks(10);
     }
 
+    /**
+     * 生成随机数
+     * @param len 随机数长度
+     * @return
+     */
     public String r(int len) {
         return (Math.random()+"").substring(2,len+2);
     }

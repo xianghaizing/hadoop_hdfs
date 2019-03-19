@@ -1,5 +1,6 @@
-package com.lyf.bean;
+package com.lyf.bo;
 
+import com.lyf.bean.OrderBean;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
