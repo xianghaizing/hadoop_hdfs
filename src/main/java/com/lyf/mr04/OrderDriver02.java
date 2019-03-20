@@ -19,7 +19,7 @@ public class OrderDriver02{
 
         HadoopDriverUtilPro util = new HadoopDriverUtilPro(OrderMap.class, OrderReduce.class, OrderDriver02.class);
 
-        Job job = util.getInstance("E:\\hadoop_hdfs\\input\\01","E:\\hadoop_hdfs\\output");
+        Job job = util.getInstance("E:\\xianghaizing\\hadoop_hdfs\\input\\01","E:\\xianghaizing\\hadoop_hdfs\\output");
 
         //设置分区
         job.setPartitionerClass(OrderPartitioner.class);

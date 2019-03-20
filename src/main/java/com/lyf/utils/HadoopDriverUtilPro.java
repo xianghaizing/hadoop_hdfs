@@ -17,9 +17,9 @@ import java.util.Date;
 public class HadoopDriverUtilPro{
 
     private String jobName;
-    private Class mapClass;
-    private Class reducerClass;
-    private Class mainClass;
+    private Class map;
+    private Class reduce;
+    private Class main;
     private String outPath;
 
     /**
@@ -37,9 +37,9 @@ public class HadoopDriverUtilPro{
      */
     public HadoopDriverUtilPro(Class map, Class reducer, Class main) {
         this.jobName = "job_" + new Date().getTime();
-        this.mapClass = map;
-        this.reducerClass = reducer;
-        this.mainClass = main;
+        this.map = map;
+        this.reduce = reducer;
+        this.main = main;
     }
 
     /**
@@ -55,20 +55,20 @@ public class HadoopDriverUtilPro{
         // 2. 获取job对象
         Job job = Job.getInstance(conf, jobName);
         // 3. 设置运行主类
-        job.setJarByClass(mainClass);
+        job.setJarByClass(main);
         // 4. 设置Map
-        job.setMapperClass(mapClass);
+        job.setMapperClass(map);
         // 获取泛型列表
-        ParameterizedType p = (ParameterizedType) mapClass.getGenericSuperclass();
+        ParameterizedType p = (ParameterizedType) map.getGenericSuperclass();
         // 获取map阶段的输出类型并设置
         job.setMapOutputKeyClass((Class) p.getActualTypeArguments()[2]);
         job.setMapOutputValueClass((Class) p.getActualTypeArguments()[3]);
         FileInputFormat.addInputPath(job, new Path(in));
 
         // 5. 设置Reduce
-        job.setReducerClass(reducerClass);
+        job.setReducerClass(reduce);
         // 获取reduce阶段的输出类型并设置
-        p = (ParameterizedType) reducerClass.getGenericSuperclass();
+        p = (ParameterizedType) reduce.getGenericSuperclass();
         job.setOutputKeyClass((Class) p.getActualTypeArguments()[2]);
         job.setOutputValueClass((Class) p.getActualTypeArguments()[3]);
         // 6. 随机生成输出目录,方便调试
