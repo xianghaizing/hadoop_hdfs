@@ -8,7 +8,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Date;
 
 /**
@@ -88,11 +87,11 @@ public class HadoopDriverUtilPro{
     }
 
     public void close(Job job) throws InterruptedException, IOException, ClassNotFoundException {
-        // 6. 提交job
+        // 提交job
         int isok = job.waitForCompletion(true) ? 0 : 1;
-        System.out.println("--------------------");
+        System.out.println("---------输出目录-----------");
         System.out.println("outpath: "+outPath);
-        // 7. 退出
+        // 退出
         System.exit(isok);
     }
 }
