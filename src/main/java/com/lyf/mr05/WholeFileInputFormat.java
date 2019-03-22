@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 // 定义类继承 FileInputFormat
-public class WholeFileInputformat extends FileInputFormat<NullWritable, BytesWritable> {
+public class WholeFileInputFormat extends FileInputFormat<NullWritable, BytesWritable> {
     @Override
     protected boolean isSplitable(JobContext context, Path filename) {
         return false;
