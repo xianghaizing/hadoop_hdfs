@@ -20,8 +20,8 @@ public class FilterRecordWriter extends RecordWriter<Text, NullWritable> {
         try {
             fs = FileSystem.get(job.getConfiguration());
 // 2 创建输出文件路径
-            Path addPath = new Path("E:\\hadoop_hdfs\\input\\03\\add.log");
-            Path delPath = new Path("E:\\hadoop_hdfs\\input\\03\\del.log");
+            Path addPath = new Path("E:\\xianghaizing\\hadoop_hdfs\\input\\03\\add.log");
+            Path delPath = new Path("E:\\xianghaizing\\hadoop_hdfs\\input\\03\\del.log");
 // 3 创建输出流
             addOut = fs.create(addPath);
             delOut = fs.create(delPath);
